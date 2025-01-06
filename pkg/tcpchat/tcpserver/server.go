@@ -13,17 +13,14 @@ import (
 func StartTCPChat(protocol, host, port string) {
 	listener := createListener(protocol, host, port)
 	defer listener.Close()
-	var connMap = &sync.Map{}
 	var rooms = &sync.Map{}
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
 			panic(err)
 		}
-		id := uuid.New().String()
-		client := &domain.TCPClient{Id: id, Conn: conn}
-		connMap.Store(client.Id, client)
-		go tcpclient.HandleClient(client, connMap, rooms)
+		client := &domain.TCPClient{Id: uuid.New().String(), Conn: conn}
+		go tcpclient.HandleClient(client, rooms)
 	}
 }
 

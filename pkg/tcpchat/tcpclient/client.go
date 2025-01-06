@@ -11,11 +11,8 @@ const (
 	RoomClientChooseConnectExisting string = "2"
 )
 
-func HandleClient(client *domain.TCPClient, connMap *sync.Map, rooms *sync.Map) {
-	defer func() {
-		client.Conn.Close()
-		connMap.Delete(client.Id)
-	}()
+func HandleClient(client *domain.TCPClient, rooms *sync.Map) {
+	defer client.Conn.Close()
 	client.WritelnString("Welcome to the TCP chat!")
 	client.WriteString("You can:\n  1) Create new room\n  2) Connect to the existing room\nYour choice: ")	
 	for {
